@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-check-app-db-deployment
+  labels:
+    app: health-check-app-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: health-check-app-db-deployment
+  template:
+    metadata:
+      labels:
+        app: health-check-app-db-deployment
+    spec:
+      containers:
+      - name: health-check-app-db-deployment
+        image: laurentiuspilca/saconf2019-e6:v1
+        env:
+          - name: spring.datasource.url
+            valueFrom:
+              secretKeyRef:
+                name: saconf2019-e6-secret
+                key: spring.datasource.url
+          - name: spring.datasource.username
+            valueFrom:
+              secretKeyRef:
+                name: saconf2019-e6-secret
+                key: spring.datasource.username
+          - name: spring.datasource.password
+            valueFrom:
+              secretKeyRef:
+                name: saconf2019-e6-secret
+                key: spring.datasource.password
+        ports:
+        - name: app
+          containerPort: 8080
+          protocol: TCP
+        - name: management
+          containerPort: 8081
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3

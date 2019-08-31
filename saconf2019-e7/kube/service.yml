@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: multiple-containers-app
+spec:
+  selector:
+    app: multiple-containers-app
+  ports:
+  - name: app1
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  - name: app2
+    protocol: TCP
+    port: 9090
+    targetPort: 9090
+  type: LoadBalancer

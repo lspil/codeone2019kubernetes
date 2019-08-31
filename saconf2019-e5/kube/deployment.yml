@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-check-app-deployment
+  labels:
+    app: health-check-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: health-check-app-deployment
+  template:
+    metadata:
+      labels:
+        app: health-check-app-deployment
+    spec:
+      containers:
+      - name: health-check-app-deployment
+        image: laurentiuspilca/saconf2019-e5:v1
+        ports:
+        - name: app
+          containerPort: 8080
+          protocol: TCP
+        - name: management
+          containerPort: 8081
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3

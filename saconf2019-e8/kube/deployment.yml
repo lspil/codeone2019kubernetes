@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoscaling-app-deployment
+  labels:
+    app: autoscaling-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autoscaling-app
+  template:
+    metadata:
+      labels:
+        app: autoscaling-app
+    spec:
+      containers:
+      - name: stateful-app
+        image: laurentiuspilca/saconf2019-e8:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "300m"
+            memory: "200Mi"
+          requests:
+            cpu: "100m"
+            memory: "100Mi"

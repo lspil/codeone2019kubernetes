@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secret-app-deployment
+  labels:
+    app: secret-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: secret-app
+  template:
+    metadata:
+      labels:
+        app: secret-app
+    spec:
+      containers:
+      - name: secret-app
+        image: laurentiuspilca/saconf2019-e3:v1
+        env:
+          - name: MY_SECRET_NAME
+            valueFrom:
+              secretKeyRef:
+                name: saconf2019-ex3-secret
+                key: my.secret.name
+        ports:
+        - containerPort: 8080

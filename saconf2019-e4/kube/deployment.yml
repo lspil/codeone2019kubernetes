@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-with-sql-persistence-deployment
+  labels:
+    app: app-with-sql-persistence-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-with-sql-persistence-deployment
+  template:
+    metadata:
+      labels:
+        app: app-with-sql-persistence-deployment
+    spec:
+      containers:
+      - name: app-with-sql-persistence-deployment
+        image: laurentiuspilca/saconf2019-e4:v1
+        env:
+          - name: spring.datasource.url
+            valueFrom:
+              secretKeyRef:
+                name: saconf2019-e4-secret
+                key: spring.datasource.url
+          - name: spring.datasource.username
+            valueFrom:
+              secretKeyRef:
+                name: saconf2019-e4-secret
+                key: spring.datasource.username
+          - name: spring.datasource.password
+            valueFrom:
+              secretKeyRef:
+                name: saconf2019-e4-secret
+                key: spring.datasource.password
+        ports:
+        - containerPort: 8080

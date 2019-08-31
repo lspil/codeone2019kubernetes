@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: app-with-sql-persistence-service
+spec:
+  selector:
+    app: app-with-sql-persistence-deployment
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer

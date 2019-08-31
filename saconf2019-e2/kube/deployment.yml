@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stateful-app-deployment
+  labels:
+    app: stateful-app
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: stateful-app
+  template:
+    metadata:
+      labels:
+        app: stateful-app
+    spec:
+      containers:
+      - name: stateful-app
+        image: laurentiuspilca/saconf2019-e2:v1
+        ports:
+        - containerPort: 8080
